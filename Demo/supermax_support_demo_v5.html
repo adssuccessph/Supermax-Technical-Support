@@ -1,0 +1,1526 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Supermax Technical Support Demo V2</title>
+<style>
+:root{
+  --navy:#071c48;--navy2:#0b2c6d;--blue:#1765ec;--blue2:#0d53cb;
+  --gold:#ffb800;--gold2:#ff9f00;--green:#1fa759;--red:#df4444;
+  --orange:#ef8d1d;--ink:#14233f;--muted:#61708a;--line:#dbe5f1;
+  --bg:#f4f8fd;--card:#ffffff;--shadow:0 12px 34px rgba(9,34,78,.10);
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select,textarea{font:inherit}
+a{color:inherit}
+button{cursor:pointer}
+[hidden]{display:none!important}
+.shell{width:min(1320px,calc(100% - 30px));margin:auto}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff;white-space:nowrap}
+.brand-mark{width:42px;height:42px;display:grid;place-items:center;border:3px solid var(--gold);border-radius:13px;transform:rotate(30deg);font-weight:1000;color:var(--gold)}
+.brand-mark span{transform:rotate(-30deg)}
+.brand strong,.brand small{display:block}
+.brand strong{font-size:20px;letter-spacing:.3px}
+.brand small{font-size:9px;letter-spacing:1.1px;color:#d8e5f8}
+.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.16s ease;line-height:1.1}
+.btn:hover{transform:translateY(-1px);filter:brightness(.98)}
+.btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;box-shadow:0 8px 18px rgba(23,101,236,.25)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#17233b;box-shadow:0 8px 18px rgba(255,184,0,.25)}
+.btn-light{background:#eef5ff;color:#184d9e;border:1px solid #cdddf7}
+.btn-outline{background:#fff;color:#164f9f;border:1px solid #aac5ee}
+.btn-danger{background:#fff1f1;color:#b62d2d;border:1px solid #f0c1c1}
+.btn-success{background:#eaf8ef;color:#156d3d;border:1px solid #b5debf}
+.btn-sm{padding:8px 11px;font-size:12px;border-radius:9px}
+.btn-full{width:100%}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#eaf2ff;color:#1656bc;font-size:13px;font-weight:900}
+.status{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;font-size:11px;font-weight:1000;white-space:nowrap}
+.status-new{background:#eaf2ff;color:#1656bc}
+.status-accepted{background:#fff4d8;color:#9b6500}
+.status-in-progress{background:#e8f2ff;color:#1656bc}
+.status-waiting-customer{background:#f2e8ff;color:#7143ba}
+.status-resolved{background:#e9f8ef;color:#16733e}
+.status-overdue,.status-missed{background:#ffeaea;color:#be3232}
+.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#dce9ff,#bdd1f8);color:#124c9d;font-weight:1000;flex:0 0 auto}
+.icon-box{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:#eaf2ff;color:var(--blue);font-size:21px;font-weight:1000}
+input,select,textarea{width:100%;border:1px solid #d7e1ee;border-radius:10px;padding:12px 13px;background:#fff;color:var(--ink);outline:none}
+input:focus,select:focus,textarea:focus{border-color:#74a1f1;box-shadow:0 0 0 3px rgba(23,101,236,.10)}
+label{display:grid;gap:7px;font-size:12px;font-weight:900;color:#293a59}
+textarea{min-height:120px;resize:vertical}
+.form-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.file-chip{display:inline-flex;padding:6px 10px;border-radius:999px;background:#eaf2ff;color:#1555b8;font-size:11px;font-weight:900;margin:6px 6px 0 0}
+.table-wrap{overflow:auto;border:1px solid #e1e8f2;border-radius:14px}
+table{border-collapse:collapse;width:100%;font-size:12px;background:#fff}
+th,td{padding:12px 10px;text-align:left;border-bottom:1px solid #e8edf4;vertical-align:middle}
+th{font-size:11px;color:#55657d;background:#f8fbff}
+td small{display:block;color:var(--muted);margin-top:4px}
+tr:last-child td{border-bottom:0}
+.action-row{display:flex;gap:6px;flex-wrap:wrap}
+.toast{position:fixed;right:16px;bottom:16px;z-index:200;min-width:280px;max-width:440px;padding:14px 16px;border-radius:14px;background:#071d48;color:#fff;box-shadow:0 18px 46px rgba(4,21,54,.28);font-size:12px;font-weight:800;opacity:0;pointer-events:none;transform:translateY(20px);transition:.2s}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.success{background:#16753f}
+.toast.error{background:#ad2e2e}
+
+/* launcher */
+.launcher{min-height:100vh;background:linear-gradient(135deg,#05183b 0 52%,#f4f8fd 52%);display:grid;place-items:center;padding:24px}
+.launcher-wrap{width:min(1050px,100%);display:grid;grid-template-columns:1fr 1fr;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 34px 90px rgba(4,20,52,.22)}
+.launcher-left{padding:54px;background:linear-gradient(145deg,#061d49,#0a3477);color:#fff}
+.launcher-left h1{font-size:46px;line-height:1.08;margin:38px 0 16px}
+.launcher-left h1 span{color:var(--gold)}
+.launcher-left p{font-size:16px;line-height:1.7;color:#d4e1f6}
+.launcher-points{display:grid;gap:13px;margin-top:24px}
+.launcher-points article{padding:14px;border:1px solid rgba(255,255,255,.15);border-radius:14px;background:rgba(255,255,255,.05)}
+.launcher-points b,.launcher-points small{display:block}
+.launcher-points small{color:#c1d3ef;margin-top:3px}
+.launcher-right{padding:42px;display:grid;align-content:center;gap:16px}
+.choice{padding:22px;border:1px solid var(--line);border-radius:18px;background:#fff;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}
+.choice:hover{border-color:#8fb3ed;box-shadow:var(--shadow)}
+.choice h2{margin:0 0 5px;font-size:22px}
+.choice p{margin:0;color:var(--muted);font-size:13px}
+.choice .arrow{font-size:22px;color:var(--blue)}
+.choice-note{padding:13px;border-radius:12px;background:#fff8df;border:1px solid #efd17c;color:#664b03;font-size:12px}
+
+/* customer */
+.customer-header{position:sticky;top:0;z-index:110;background:rgba(6,26,67,.97);backdrop-filter:blur(14px);box-shadow:0 8px 24px rgba(4,19,49,.18)}
+.customer-nav{height:74px;display:flex;align-items:center;gap:28px}
+.customer-links{display:flex;align-items:center;justify-content:center;gap:30px;flex:1}
+.customer-links a{text-decoration:none;color:#d9e5f8;font-size:13px;font-weight:850;padding:28px 0 23px;border-bottom:3px solid transparent}
+.customer-links a:hover,.customer-links a.active{color:#fff;border-color:var(--gold)}
+.mobile-menu{display:none;background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff;width:42px;height:40px;border-radius:9px}
+.section-title{display:flex;gap:12px;align-items:flex-start;margin-bottom:18px}
+.section-title h2{margin:0;font-size:29px}
+.section-title p{margin:5px 0 0;color:var(--muted);font-size:14px}
+.hero{padding:44px 0 36px;background:radial-gradient(circle at 12% 16%,#edf4ff 0 12%,transparent 36%),linear-gradient(#fff,#fbfdff)}
+.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:24px;align-items:center}
+.hero-copy h1{font-size:50px;line-height:1.08;margin:16px 0}
+.hero-copy h1 span{color:var(--blue)}
+.hero-copy h1 em{font-style:normal;color:var(--gold2)}
+.hero-copy>p{font-size:16px;line-height:1.75;color:#4f607a;max-width:560px}
+.hero-actions{display:flex;gap:12px;margin:24px 0}
+.hero-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
+.hero-stat{padding:18px;text-align:center}
+.hero-stat strong{display:block;font-size:24px;margin-top:6px}
+.hero-stat span{font-size:12px;color:var(--muted);font-weight:800}
+.section{padding:42px 0}
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.step-card{padding:22px;text-align:center}
+.step-card i{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:#eaf2ff;color:var(--blue);font-style:normal;font-weight:1000;margin:0 auto 12px}
+.step-card:nth-child(2) i{background:#fff4d7;color:#aa7000}.step-card:nth-child(4) i{background:#eaf8ef;color:#19844a}
+.step-card h3{font-size:16px;margin:0 0 8px}.step-card p{font-size:13px;line-height:1.6;color:var(--muted);margin:0}
+.inquiry-layout{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}
+.panel{padding:22px}
+.upload-area{padding:16px;border:1.5px dashed #8db2ef;border-radius:12px;background:#f7faff;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}
+.upload-area.drag{background:#eaf2ff;border-color:var(--blue)}
+.upload-area strong{display:block;font-size:13px}
+.upload-area p{margin:4px 0 0;font-size:11px;color:var(--muted)}
+.info-note{padding:12px;border-radius:10px;background:#eef5ff;color:#244b85;font-size:12px;font-weight:700;margin-top:12px}
+.success-box{padding:14px;border-radius:14px;background:#eaf8ef;border:1px solid #addcbd;color:#14683a}
+.success-box strong{display:block;font-size:22px;margin:5px 0}
+.tracking-result{margin-top:14px}
+.tracking-card{padding:16px;border:1px solid #dbe5f1;border-radius:12px;background:#fbfdff}
+.tracking-card h3{margin:0 0 8px;font-size:18px;color:#1250b5}
+.progress-line{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:15px 0 12px}
+.progress-line span{position:relative;text-align:center;padding-top:27px;font-size:10px;color:#77859a;font-weight:900}
+.progress-line span:before{content:"";position:absolute;top:4px;left:50%;transform:translateX(-50%);width:18px;height:18px;border-radius:50%;background:#dce5f0;z-index:2}
+.progress-line span:after{content:"";position:absolute;top:12px;right:50%;left:-50%;height:2px;background:#dce5f0}
+.progress-line span:first-child:after{display:none}
+.progress-line .done{color:#1652af}.progress-line .done:before,.progress-line .done:after{background:var(--blue)}
+.tracking-details{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;font-size:12px}
+.tracking-details dt{font-weight:900;color:#54657c}.tracking-details dd{margin:0}
+.queue-preview{display:grid;gap:10px}
+.queue-line{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #e7edf4}
+.queue-line:last-child{border-bottom:0}
+.queue-line .avatar{width:34px;height:34px;font-size:10px}
+.queue-line strong,.queue-line small{display:block}
+.queue-line small{color:var(--green);font-size:10px}
+.banner{padding:16px 22px;display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;background:#eef5ff;border:1px solid #b7cff4}
+.support-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.support-card{padding:22px}
+.support-card h3{margin:10px 0 7px}.support-card p{font-size:13px;line-height:1.7;color:var(--muted);margin:0}
+.customer-footer{background:#071d48;color:#fff;padding:30px 0}
+.footer-grid{display:grid;grid-template-columns:1.05fr repeat(3,.85fr);gap:24px;align-items:center}
+.footer-item b,.footer-item small{display:block}.footer-item small{color:#c3d2eb;margin-top:4px;font-size:11px}
+.footer-highlight{padding:16px;border-radius:14px;background:linear-gradient(135deg,var(--gold),#ff9f00);color:#17233b}
+.footer-highlight b,.footer-highlight small{display:block}
+
+/* admin login */
+.admin-login{min-height:100vh;display:grid;grid-template-columns:1.02fr .98fr;background:linear-gradient(135deg,#061a43 0 52%,#f5f8fd 52%)}
+.login-info{padding:60px clamp(26px,7vw,95px);color:#fff;display:flex;flex-direction:column;justify-content:center}
+.login-info h1{font-size:48px;line-height:1.06;margin:40px 0 16px}
+.login-info h1 span{color:var(--gold)}
+.login-info>p{color:#d2dff3;line-height:1.75;max-width:620px}
+.login-points{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
+.login-points article{padding:14px;border:1px solid rgba(255,255,255,.15);border-radius:14px;background:rgba(255,255,255,.05)}
+.login-points b,.login-points small{display:block}.login-points small{color:#bed0eb;margin-top:3px}
+.login-box-wrap{display:grid;place-items:center;padding:24px}
+.login-box{width:min(460px,100%);padding:30px}
+.login-box h2{margin:0 0 6px}.login-box>p{margin:0 0 20px;color:var(--muted)}
+.password-wrap{position:relative}
+.password-wrap button{position:absolute;right:6px;bottom:6px;border:0;background:#eef4ff;border-radius:8px;padding:7px 9px;color:#1750a6;font-size:11px;font-weight:900}
+.login-hint{margin-top:16px;padding:13px;border-radius:12px;background:#fff8de;border:1px solid #efd27b;color:#654901;font-size:12px}
+
+/* admin dashboard */
+.admin-topbar{position:sticky;top:0;z-index:120;height:72px;background:linear-gradient(90deg,#061a43,#031331);color:#fff;display:flex;align-items:center;padding:0 18px;gap:18px;box-shadow:0 8px 24px rgba(4,19,49,.22)}
+.admin-topbar .brand{min-width:240px}
+.admin-title{flex:1}.admin-title b,.admin-title small{display:block}.admin-title small{color:#bdd0ea;font-size:11px}
+.admin-user{display:flex;align-items:center;gap:10px}
+.admin-user small{display:block;color:#bfd0e8}
+.admin-layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 72px)}
+.admin-sidebar{position:sticky;top:72px;height:calc(100vh - 72px);background:#071d48;padding:16px 12px;color:#fff}
+.admin-sidebar nav{display:grid;gap:6px}
+.admin-tab{padding:12px 13px;border-radius:10px;color:#d5e0f4;text-decoration:none;font-size:13px;font-weight:850;display:flex;gap:10px;align-items:center}
+.admin-tab:hover,.admin-tab.active{background:#12356e;color:#fff;border-left:4px solid var(--gold)}
+.side-label{font-size:10px;color:#8ea4c3;letter-spacing:1px;margin:16px 10px 7px}
+.side-box{position:absolute;bottom:15px;left:12px;right:12px;padding:12px;border:1px solid rgba(255,255,255,.13);border-radius:12px;background:rgba(255,255,255,.04)}
+.side-box b,.side-box small{display:block}.side-box small{color:#abc0dd}
+.admin-main{padding:22px}
+.admin-toolbar{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}
+.admin-toolbar h1{font-size:30px;margin:0}
+.admin-toolbar p{margin:4px 0 0;color:var(--muted)}
+.admin-tools{display:flex;gap:8px;flex-wrap:wrap}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}
+.kpi{padding:17px}.kpi span{font-size:11px;color:#5a6a83;font-weight:900}.kpi strong{display:block;font-size:30px;margin:6px 0}.kpi small{font-size:10px;color:var(--muted)}
+.admin-view{display:none}
+.admin-view.active{display:block}
+.view-grid{display:grid;grid-template-columns:1.35fr .95fr;gap:16px}
+.view-stack{display:grid;gap:16px}
+.admin-panel{padding:20px}
+.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+.panel-head h2{margin:0;font-size:22px}.panel-head p{margin:5px 0 0;color:var(--muted);font-size:13px}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.stat-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.activity-list{display:grid;gap:8px}
+.activity-item{padding:10px;border:1px solid #e1e8f2;border-radius:11px;background:#fbfdff}
+.activity-item b,.activity-item small{display:block}.activity-item b{font-size:12px}.activity-item small{font-size:10px;color:var(--muted);margin-top:4px}
+.workflow{display:grid;gap:10px}
+.workflow article{display:grid;grid-template-columns:auto 1fr;gap:11px;padding:12px;border:1px solid #dfe7f2;border-radius:12px;background:#fbfdff}
+.workflow span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--blue);color:#fff;font-weight:1000}
+.workflow h4{margin:0;font-size:13px}.workflow p{margin:4px 0 0;font-size:11px;color:var(--muted)}
+.ticket-focus{margin-top:12px;padding:14px;border:1px solid #cde0fb;border-radius:12px;background:#f7faff}
+.ticket-focus h3{margin:0 0 5px}.ticket-focus p{font-size:12px;margin:5px 0}
+.team-list{display:grid;gap:10px}
+.team-card{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px;border:1px solid #e1e8f2;border-radius:12px}
+.team-card h4{margin:0;font-size:13px}.team-card p{margin:5px 0 0;font-size:11px;color:var(--muted)}
+.team-metrics{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}.team-metrics span{font-size:10px;color:var(--muted)}.team-metrics strong{display:block;font-size:13px;color:var(--ink)}
+.user-layout{display:grid;grid-template-columns:.78fr 1.22fr;gap:16px}
+.account-form{padding:18px;border:1px solid #dfe7f2;border-radius:14px;background:#fbfdff}
+.account-form h3{margin:0 0 14px}
+.account-note{padding:12px;border-radius:10px;background:#fff8de;border:1px solid #efd07a;color:#644902;font-size:11px}
+.form-actions{display:flex;gap:8px;flex-wrap:wrap}
+.role-pill{display:inline-flex;padding:5px 8px;border-radius:999px;background:#eaf2ff;color:#1656bc;font-size:10px;font-weight:1000}
+.dialog{border:0;border-radius:18px;width:min(700px,calc(100% - 30px));padding:0;box-shadow:0 34px 90px rgba(4,21,54,.3)}
+.dialog::backdrop{background:rgba(2,14,36,.56)}
+.dialog-body{padding:22px}
+.dialog-close{float:right;border:0;background:#eef3fb;width:36px;height:36px;border-radius:10px;font-size:18px}
+.detail-grid{display:grid;grid-template-columns:150px 1fr;gap:10px;font-size:12px}
+.detail-grid dt{font-weight:900;color:#55657c}.detail-grid dd{margin:0}
+.empty{padding:16px;border-radius:12px;background:#fbfdff;border:1px dashed #dbe5f1;color:var(--muted);font-size:13px}
+
+
+
+/* branding customization */
+.brand-mark.has-logo{transform:none;border:0;background:#fff;overflow:hidden;padding:3px}
+.brand-mark.has-logo span{display:none}
+.brand-mark.has-logo img{display:block;width:100%;height:100%;object-fit:contain;border-radius:9px}
+.brand-preview{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;padding:14px;border:1px solid #dce5f1;border-radius:13px;background:#fbfdff;margin-bottom:14px}
+.brand-preview-logo{width:72px;height:72px;border-radius:16px;border:1px solid #d5e0ef;background:#fff;display:grid;place-items:center;overflow:hidden;color:var(--gold);font-weight:1000;font-size:25px}
+.brand-preview-logo img{width:100%;height:100%;object-fit:contain;padding:4px}
+.brand-preview h3,.brand-preview p{margin:0}
+.brand-preview p{font-size:12px;color:var(--muted);margin-top:4px}
+.logo-upload-box{padding:15px;border:1.5px dashed #8eb2ed;border-radius:12px;background:#f7faff}
+.logo-upload-box small{display:block;color:var(--muted);margin-top:6px;line-height:1.5}
+
+/* auto refresh and enhanced phone support */
+.auto-refresh-pill{display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:8px 11px;border-radius:999px;background:#eaf8ef;border:1px solid #b9dfc5;color:#176b3d;font-size:11px;font-weight:900;white-space:nowrap}
+.auto-refresh-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(31,167,89,.12)}
+.tracking-refresh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0;padding:9px 10px;border-radius:10px;background:#eef5ff;border:1px solid #c5d8f6;color:#244c87;font-size:10px;font-weight:850}
+.tracking-refresh span{display:flex;align-items:center;gap:7px}
+.mobile-scroll-note{display:none;padding:8px 10px;margin-bottom:8px;border-radius:9px;background:#fff8de;border:1px solid #efd27b;color:#654901;font-size:10px;font-weight:800}
+.table-wrap{-webkit-overflow-scrolling:touch;overscroll-behavior-inline:contain}
+button,.btn,a,input,select,textarea{touch-action:manipulation}
+
+/* responsive */
+@media(max-width:1100px){
+  .hero-grid,.inquiry-layout,.view-grid,.user-layout{grid-template-columns:1fr}
+  .kpis{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:900px){
+  .customer-links{position:absolute;top:74px;left:0;right:0;display:none;max-height:calc(100vh - 74px);overflow-y:auto;background:#071d48;padding:8px 18px 15px;box-shadow:0 15px 28px rgba(3,18,46,.2)}
+  .customer-links.open{display:grid}.customer-links a{padding:12px 4px;border-bottom:0;min-height:44px;display:flex;align-items:center}
+  .mobile-menu{display:block;margin-left:auto}.customer-nav>.btn{display:none}
+  .steps-grid,.support-cards{grid-template-columns:1fr 1fr}
+  .admin-login{grid-template-columns:1fr;background:#f5f8fd}.login-info{background:#061a43;padding:36px 24px}.login-info h1{font-size:36px}.login-box-wrap{padding:20px 14px}
+  .admin-layout{grid-template-columns:1fr}
+  .admin-sidebar{position:sticky;top:70px;z-index:108;height:auto;padding:9px;background:#071d48;box-shadow:0 8px 18px rgba(4,19,49,.16)}
+  .admin-sidebar nav{display:flex;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
+  .admin-tab{white-space:nowrap;min-height:44px;flex:0 0 auto}
+  .side-label,.side-box{display:none}
+  .admin-main{padding-top:16px}
+}
+@media(max-width:650px){
+  html{scroll-padding-top:70px}
+  body{font-size:16px;padding-bottom:env(safe-area-inset-bottom)}
+  input,select,textarea{font-size:16px}
+  .btn{min-height:44px}
+  .shell{width:min(100% - 20px,1320px)}
+  .launcher{padding:10px}.launcher-wrap{grid-template-columns:1fr;border-radius:20px}.launcher-left,.launcher-right{padding:25px}.launcher-left h1{font-size:33px}
+  .choice{grid-template-columns:auto 1fr;padding:17px}.choice .arrow{display:none}
+  .customer-nav{height:66px;gap:10px}.customer-links{top:66px;max-height:calc(100vh - 66px)}
+  .brand-mark{width:36px;height:36px}.brand strong{font-size:16px}.brand small{font-size:7px}
+  .hero{padding:28px 0 24px}.hero-copy h1{font-size:36px}.hero-copy>p{font-size:15px}
+  .hero-actions{flex-direction:column}.hero-actions .btn{width:100%}
+  .section{padding:31px 0}.section-title h2{font-size:24px}.section-title p{font-size:13px}
+  .panel,.step-card,.support-card{padding:16px}
+  .form-row,.stat-grid-2,.detail-grid,.tracking-details{grid-template-columns:1fr}
+  .upload-area{grid-template-columns:auto 1fr;padding:13px}.upload-area .btn{grid-column:1/-1;width:100%}
+  .steps-grid,.hero-cards,.support-cards,.kpis{grid-template-columns:1fr}
+  .banner{grid-template-columns:auto 1fr;padding:14px}.banner .btn{grid-column:1/-1;width:100%}
+  .footer-grid{grid-template-columns:1fr}
+  .progress-line{grid-template-columns:1fr 1fr}.progress-line span:after{display:none}
+  .tracking-refresh{align-items:flex-start;flex-direction:column}
+  .admin-topbar{height:auto;min-height:70px;padding:9px 10px}.admin-title{display:none}.admin-user>div:not(.avatar){display:none}
+  .admin-topbar .brand{min-width:0}.admin-user{margin-left:auto}.admin-user .avatar{display:none}
+  .admin-main{padding:12px}.admin-toolbar{flex-direction:column}.admin-toolbar h1{font-size:25px}
+  .admin-tools{width:100%}.admin-tools .btn{flex:1}.auto-refresh-pill{width:100%;justify-content:center}
+  .admin-sidebar{top:66px}
+  .admin-panel{padding:14px}.panel-head{flex-direction:column}.panel-head h2{font-size:20px}
+  .filters{width:100%;display:grid;grid-template-columns:1fr}.filters input,.filters select{width:100%;min-width:0}
+  .mobile-scroll-note{display:block}
+  .table-wrap{max-width:100%;overflow-x:auto}
+  .table-wrap table{min-width:850px}
+  #view-reports .table-wrap table,#view-accounts .table-wrap table,#view-categories .table-wrap table{min-width:650px}
+  .dialog-body{padding:17px}
+}
+@media(max-width:390px){
+  .brand strong{font-size:14px}.customer-nav{gap:6px}
+  .hero-copy h1{font-size:32px}
+  .admin-user .btn{padding:8px 9px;font-size:10px}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="toast" id="toast"></div>
+<dialog class="dialog" id="ticketDialog">
+  <div class="dialog-body">
+    <button class="dialog-close" id="dialogClose" aria-label="Close">×</button>
+    <div id="dialogContent"></div>
+  </div>
+</dialog>
+
+<script>
+(()=>{
+'use strict';
+const KEY='supermaxSupportDemoV5Data';
+const SESSION='supermaxSupportDemoV5Session';
+const DEFAULT_SLA=120;
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const uid=(p='id')=>p+'-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+const fmt=ts=>ts?new Date(ts).toLocaleString('en-PH',{dateStyle:'medium',timeStyle:'short'}):'—';
+const wait=ms=>{const m=Math.max(0,Math.floor(ms/60000));return m<60?m+'m':Math.floor(m/60)+'h '+(m%60)+'m'};
+const slug=s=>'status-'+String(s).toLowerCase().replace(/[^a-z]+/g,'-').replace(/^-|-$/g,'');
+const initials=name=>String(name).split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase();
+let state, currentUser=null, selectedTicketId=null, selectedFiles=[], editUserId=null, editCategoryId=null;
+let autoRefreshTimer=null, autoRefreshSeconds=15, trackedTicketId='', trackedTicketEmail='', settingsDirty=false;
+
+function seed(){
+ const now=Date.now();
+ return {
+  version:5,
+  settings:{
+   pageUrl:'https://m.me/',
+   pageName:'Supermax Technical Support',
+   websiteName:'SUPERMAX',
+   websiteSubtitle:'TECHNICAL SUPPORT',
+   logoDataUrl:'',
+   slaMinutes:DEFAULT_SLA,
+   productCategories:[
+    {id:'cat-inverter',name:'Solar Inverter'},
+    {id:'cat-battery',name:'Battery'},
+    {id:'cat-panel',name:'Solar Panel'}
+   ]
+  },
+  users:[
+   {id:'admin-root',role:'admin',name:'Main Administrator',username:'mainadmin',password:'Admin123',active:true,createdAt:now},
+   {id:'tech-jane',role:'tech',name:'Jane Dela Cruz',username:'jane',password:'Support123',active:true,createdAt:now},
+   {id:'tech-mark',role:'tech',name:'Mark Santos',username:'mark',password:'Support123',active:true,createdAt:now},
+   {id:'tech-kevin',role:'tech',name:'Kevin Ramos',username:'kevin',password:'Support123',active:true,createdAt:now},
+   {id:'tech-liza',role:'tech',name:'Liza Mendoza',username:'liza',password:'Support123',active:true,createdAt:now}
+  ],
+  tickets:[
+   {id:'SMX-TS-2026-0001',name:'Juan Dela Cruz',email:'juan@example.com',phone:'09171234567',category:'Solar Inverter',serial:'DEYE-5K-2819',description:'Inverter shows a grid error after restart.',images:['error-screen.jpg','unit-label.jpg'],createdAt:now-3.6*3600000,lastUpdatedAt:now-3.6*3600000,status:'New',assignedTo:null,assignedName:null,acceptedAt:null,chatAssignedAt:null,firstReplyAt:null,resolvedAt:null,currentOffer:{userId:'tech-jane',offeredAt:now-3.6*3600000},offerHistory:[]},
+   {id:'SMX-TS-2026-0002',name:'Maria Santos',email:'maria@example.com',phone:'09181112222',category:'Battery',serial:'PYTES-V15-1102',description:'Battery is not charging above 60 percent.',images:['battery-screen.png'],createdAt:now-55*60000,lastUpdatedAt:now-55*60000,status:'New',assignedTo:null,assignedName:null,acceptedAt:null,chatAssignedAt:null,firstReplyAt:null,resolvedAt:null,currentOffer:{userId:'tech-mark',offeredAt:now-55*60000},offerHistory:[]},
+   {id:'SMX-TS-2026-0003',name:'Carlos Reyes',email:'carlos@example.com',phone:'09221234567',category:'CCTV',serial:'NVR-7712',description:'Two cameras are offline and display network timeout.',images:['camera-1.jpg','nvr-screen.jpg'],createdAt:now-4.2*3600000,lastUpdatedAt:now-2.2*3600000,status:'Accepted',assignedTo:'tech-kevin',assignedName:'Kevin Ramos',acceptedAt:now-2.2*3600000,chatAssignedAt:null,firstReplyAt:null,resolvedAt:null,currentOffer:null,offerHistory:[{userId:'tech-kevin',offeredAt:now-4.2*3600000,acceptedAt:now-2.2*3600000,missedAt:null}]},
+   {id:'SMX-TS-2026-0004',name:'Ana Garcia',email:'ana@example.com',phone:'09331234567',category:'POS System',serial:'POS-2026-315',description:'Receipt printer is not detected by the POS terminal.',images:['printer-error.webp'],createdAt:now-2.1*3600000,lastUpdatedAt:now-65*60000,status:'In Progress',assignedTo:'tech-mark',assignedName:'Mark Santos',acceptedAt:now-1.9*3600000,chatAssignedAt:now-1.6*3600000,firstReplyAt:now-65*60000,resolvedAt:null,currentOffer:null,offerHistory:[{userId:'tech-mark',offeredAt:now-2.1*3600000,acceptedAt:now-1.9*3600000,missedAt:null}]},
+   {id:'SMX-TS-2026-0005',name:'Rodel Alvarez',email:'rodel@example.com',phone:'09441234567',category:'Solar Panel',serial:'CS6W-585TB-AG',description:'Need assistance checking possible panel damage.',images:['panel.jpg'],createdAt:now-8*3600000,lastUpdatedAt:now-50*60000,status:'Resolved',assignedTo:'tech-jane',assignedName:'Jane Dela Cruz',acceptedAt:now-7.7*3600000,chatAssignedAt:now-7.5*3600000,firstReplyAt:now-7.3*3600000,resolvedAt:now-50*60000,currentOffer:null,offerHistory:[{userId:'tech-jane',offeredAt:now-8*3600000,acceptedAt:now-7.7*3600000,missedAt:null}]}
+  ],
+  activity:[{id:uid('act'),message:'Demo initialized.',at:now}],
+  nextOfferIndex:0
+ };
+}
+function load(){
+ try{
+  const raw=JSON.parse(localStorage.getItem(KEY));
+  if(raw&&raw.version===5&&Array.isArray(raw.users)&&Array.isArray(raw.tickets))return raw;
+ }catch(e){}
+ const s=seed();save(s);return s;
+}
+function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
+function user(id){return state.users.find(u=>u.id===id)}
+function techUsers(){return state.users.filter(u=>u.role==='tech'&&u.active)}
+function productCategories(){
+ const list=state.settings?.productCategories;
+ return Array.isArray(list)?list:[];
+}
+function productCategoryOptions(){
+ const list=productCategories();
+ return list.length
+  ? '<option value="">Select category</option>'+list.map(c=>`<option value="${esc(c.name)}">${esc(c.name)}</option>`).join('')
+  : '<option value="">No product category available</option>';
+}
+
+function brandName(){return String(state.settings?.websiteName||'SUPERMAX').trim()||'SUPERMAX'}
+function brandSubtitle(){return String(state.settings?.websiteSubtitle||'TECHNICAL SUPPORT').trim()||'TECHNICAL SUPPORT'}
+function applyBranding(){
+ const name=brandName(), subtitle=brandSubtitle(), logo=state.settings?.logoDataUrl||'';
+ $$('.brand').forEach(brand=>{
+   const strong=$('strong',brand), small=$('small',brand), mark=$('.brand-mark',brand);
+   if(strong)strong.textContent=name;
+   if(small)small.textContent=subtitle;
+   if(mark){
+     if(logo){
+       mark.classList.add('has-logo');
+       mark.innerHTML=`<img src="${logo}" alt="${esc(name)} logo">`;
+     }else{
+       mark.classList.remove('has-logo');
+       mark.innerHTML='<span>S</span>';
+     }
+   }
+ });
+ document.title=document.title.replace(/^Supermax Technical Support/,name+' '+subtitle);
+}
+function brandingPreviewHtml(){
+ const logo=state.settings?.logoDataUrl||'';
+ return `<div class="brand-preview">
+   <div class="brand-preview-logo" id="brandPreviewLogo">${logo?`<img src="${logo}" alt="Logo preview">`:'S'}</div>
+   <div><h3 id="brandPreviewName">${esc(brandName())}</h3><p id="brandPreviewSubtitle">${esc(brandSubtitle())}</p></div>
+ </div>`;
+}
+
+function roleName(u){return u?.role==='admin'?'Main Admin':'Technical Support'}
+function notify(msg,type=''){const t=$('#toast');t.textContent=msg;t.className='toast show '+type;clearTimeout(notify.t);notify.t=setTimeout(()=>t.className='toast',3200)}
+
+function clearAutoRefresh(){
+ if(autoRefreshTimer)clearInterval(autoRefreshTimer);
+ autoRefreshTimer=null;
+ autoRefreshSeconds=15;
+}
+function isUserEditing(){
+ const el=document.activeElement;
+ return !!(el&&['INPUT','TEXTAREA','SELECT'].includes(el.tagName));
+}
+function setAdminRefreshLabel(text){
+ const el=$('#adminAutoRefreshLabel');
+ if(el)el.textContent=text;
+}
+function startAdminAutoRefresh(isAdmin){
+ clearAutoRefresh();
+ autoRefreshSeconds=15;
+ setAdminRefreshLabel('Auto-refresh in 15s');
+ autoRefreshTimer=setInterval(()=>{
+   if(document.hidden)return;
+   if(isUserEditing()||$('#ticketDialog')?.open){
+     setAdminRefreshLabel('Paused while editing');
+     return;
+   }
+   autoRefreshSeconds-=1;
+   if(autoRefreshSeconds<=0){
+     state=load();
+     refreshSLA();
+     state=load();
+     const freshUser=user(currentUser?.id);
+     if(!freshUser||!freshUser.active){
+       clearAutoRefresh();
+       sessionStorage.removeItem(SESSION);
+       renderAdminLogin();
+       return;
+     }
+     currentUser=freshUser;
+     renderAdminData(isAdmin);
+     autoRefreshSeconds=15;
+   }
+   setAdminRefreshLabel('Auto-refresh in '+autoRefreshSeconds+'s');
+ },1000);
+}
+function startCustomerAutoRefresh(id,email){
+ clearAutoRefresh();
+ trackedTicketId=id;
+ trackedTicketEmail=email.toLowerCase();
+ autoRefreshSeconds=15;
+ const update=()=>{
+   const label=$('#customerAutoRefreshLabel');
+   if(label)label.textContent='Auto-refresh in '+autoRefreshSeconds+'s';
+ };
+ update();
+ autoRefreshTimer=setInterval(()=>{
+   if(document.hidden)return;
+   autoRefreshSeconds-=1;
+   if(autoRefreshSeconds<=0){
+     refreshTrackedTicket(false);
+     autoRefreshSeconds=15;
+   }
+   update();
+ },1000);
+}
+function refreshTrackedTicket(showNotice=true){
+ if(!trackedTicketId||!trackedTicketEmail)return;
+ state=load();
+ refreshSLA();
+ state=load();
+ const t=state.tickets.find(x=>x.id===trackedTicketId&&x.email.toLowerCase()===trackedTicketEmail);
+ if(!t)return;
+ showTracking(t,false);
+ autoRefreshSeconds=15;
+ const label=$('#customerAutoRefreshLabel');
+ if(label)label.textContent='Auto-refresh in 15s';
+ if(showNotice)notify('Ticket status refreshed.','success');
+}
+
+function log(msg){state.activity.unshift({id:uid('act'),message:msg,at:Date.now()});state.activity=state.activity.slice(0,100)}
+function nextTicketId(){const n=Math.max(0,...state.tickets.map(t=>Number(t.id.split('-').pop())||0))+1;return 'SMX-TS-2026-'+String(n).padStart(4,'0')}
+function nextTech(exclude=[]){const list=techUsers().filter(t=>!exclude.includes(t.id));if(!list.length)return null;const tech=list[state.nextOfferIndex%list.length];state.nextOfferIndex=(state.nextOfferIndex+1)%Math.max(1,list.length);return tech}
+function offerTicket(t,exclude=[]){const tech=nextTech(exclude);t.currentOffer=tech?{userId:tech.id,offeredAt:Date.now()}:null;t.lastUpdatedAt=Date.now();if(tech)log(t.id+' offered to '+tech.name+'.')}
+function refreshSLA(){
+ let changed=false;
+ state.tickets.forEach(t=>{
+  if(t.status==='Resolved'||t.assignedTo||!t.currentOffer)return;
+  const mins=(Date.now()-t.currentOffer.offeredAt)/60000;
+  if(mins>=Number(state.settings.slaMinutes||DEFAULT_SLA)){
+   t.offerHistory.push({userId:t.currentOffer.userId,offeredAt:t.currentOffer.offeredAt,acceptedAt:null,missedAt:Date.now()});
+   const missed=user(t.currentOffer.userId);
+   t.currentOffer=null;t.lastUpdatedAt=Date.now();
+   log(t.id+' acceptance offer missed'+(missed?' by '+missed.name:'')+'.');
+   offerTicket(t,[missed?.id].filter(Boolean));changed=true;
+  }
+ });
+ if(changed)save(state);
+}
+function currentOfferName(t){return user(t.currentOffer?.userId)?.name||'—'}
+function selectedStep(t){return t.status==='Resolved'?4:t.firstReplyAt?3:t.assignedTo?2:1}
+function acceptedCount(id){return state.tickets.filter(t=>t.assignedTo===id).length}
+function missedCount(id){return state.tickets.reduce((n,t)=>n+t.offerHistory.filter(o=>o.userId===id&&o.missedAt).length,0)}
+function noReplyCount(id){return state.tickets.filter(t=>t.assignedTo===id&&!t.firstReplyAt&&t.status!=='Resolved').length}
+function resolvedCount(id){return state.tickets.filter(t=>t.assignedTo===id&&t.status==='Resolved').length}
+function portalUrl(portal){const u=new URL(location.href);if(portal)u.searchParams.set('portal',portal);else u.searchParams.delete('portal');return u.href}
+function openPageChat(){
+ const url=state.settings.pageUrl||'';
+ if(/^https?:\/\//i.test(url)&&url!=='https://m.me/')window.open(url,'_blank','noopener');
+ else alert('Demo only: set the official Facebook Page URL in Admin → Settings.');
+}
+
+function renderLauncher(){
+ clearAutoRefresh();
+ document.title='Supermax Technical Support Demo';
+ $('#app').innerHTML=`<main class="launcher"><section class="launcher-wrap">
+  <div class="launcher-left">
+   <a class="brand" href="#"><span class="brand-mark"><span>S</span></span><span><strong>SUPERMAX</strong><small>TECHNICAL SUPPORT</small></span></a>
+   <h1>Cleaner UI.<br><span>Separated portals.</span></h1>
+   <p>This version uses larger text and a better structure: the customer website is organized by scroll sections, while the Admin / Technical Support side uses separate tabs so everything is easier to read.</p>
+   <div class="launcher-points">
+    <article><b>Customer Portal</b><small>Sticky navigation, admin-managed product categories, inquiry submission, ticket tracking, and Support Page instructions.</small></article>
+    <article><b>Admin / Technical Support Portal</b><small>Tabbed dashboard: Overview, Inquiry Queue, Team Reports, Technical Accounts, and Settings.</small></article>
+   </div>
+  </div>
+  <div class="launcher-right">
+   <button class="choice" id="goCustomer"><span class="icon-box">👤</span><span><h2>Open Customer Portal</h2><p>Customer-only website with inquiry form and tracking.</p></span><span class="arrow">→</span></button>
+   <button class="choice" id="goAdmin"><span class="icon-box">🔐</span><span><h2>Open Admin / Technical Portal</h2><p>Main Admin and Technical Support login with customizable logo and website name.</p></span><span class="arrow">→</span></button>
+   <div class="choice-note"><b>Default demo login</b><br>Main Admin: <code>mainadmin</code> / <code>Admin123</code><br>Technical Support: <code>jane</code> / <code>Support123</code></div>
+  </div>
+ </section></main>`;
+ $('#goCustomer').onclick=()=>location.href=portalUrl('customer');
+ $('#goAdmin').onclick=()=>location.href=portalUrl('admin');
+ applyBranding();
+}
+
+function renderCustomer(){
+ clearAutoRefresh();
+ document.title='Supermax Technical Support — Customer Portal';
+ const techs=techUsers();
+ $('#app').innerHTML=`<header class="customer-header">
+  <div class="shell customer-nav">
+   <a class="brand" href="#home"><span class="brand-mark"><span>S</span></span><span><strong>SUPERMAX</strong><small>TECHNICAL SUPPORT</small></span></a>
+   <button class="mobile-menu" id="mobileMenu">☰</button>
+   <nav class="customer-links" id="customerLinks">
+    <a href="#home" class="active">Home</a>
+    <a href="#how">How It Works</a>
+    <a href="#submit">Submit Inquiry</a>
+    <a href="#track">Track Ticket</a>
+    <a href="#support">Support Page</a>
+   </nav>
+   <button class="btn btn-gold" data-scroll="#submit">Submit Inquiry</button>
+  </div>
+ </header>
+ <main>
+  <section class="hero" id="home">
+   <div class="shell hero-grid">
+    <div class="hero-copy">
+     <span class="eyebrow">✓ Customer Portal</span>
+     <h1>Get Technical Support <span>Quickly</span> and <em>Easily.</em></h1>
+     <p>Submit your concern, upload up to three image files, receive a tracking number, and continue the conversation through the official Technical Support Facebook Page.</p>
+     <div class="hero-actions">
+      <button class="btn btn-gold" data-scroll="#submit">Submit Inquiry</button>
+      <button class="btn btn-outline" data-scroll="#track">Track Ticket</button>
+     </div>
+     <div class="hero-cards">
+      <article class="card hero-stat"><div class="icon-box" style="margin:auto">⌕</div><strong>${state.tickets.length}</strong><span>Total Demo Tickets</span></article>
+      <article class="card hero-stat"><div class="icon-box" style="margin:auto">👥</div><strong>${techs.length}</strong><span>Technical Accounts</span></article>
+      <article class="card hero-stat"><div class="icon-box" style="margin:auto">✓</div><strong>${state.tickets.filter(t=>t.status==='Resolved').length}</strong><span>Resolved</span></article>
+     </div>
+    </div>
+    <div class="card panel">
+      <div class="section-title"><span class="icon-box">ℹ</span><div><h2>Customer Reminder</h2><p>Only image files are uploaded in the inquiry form to save storage space. Send additional screenshots in Page chat.</p></div></div>
+      <div class="banner card" style="box-shadow:none;margin:0">
+        <span class="icon-box">💬</span>
+        <div><b style="display:block;font-size:16px;color:#1451b5">Use your tracking number in the support page.</b><span class="muted small">After submission, message the Technical Support Page and send the tracking number first.</span></div>
+        <button class="btn btn-primary" id="pageChatBtnHero">Message Support Page</button>
+      </div>
+      <div style="margin-top:18px" class="queue-preview">
+        ${techs.slice(0,5).map(t=>`<div class="queue-line"><span class="avatar">${initials(t.name)}</span><span><strong>${esc(t.name)}</strong><small>● Available</small></span><b>${state.tickets.filter(x=>x.assignedTo===t.id&&x.status!=='Resolved').length}</b></div>`).join('')}
+      </div>
+    </div>
+   </div>
+  </section>
+
+  <section class="section" id="how">
+   <div class="shell">
+    <div class="section-title"><span class="icon-box">➜</span><div><h2>How the Support Process Works</h2><p>The steps below guide the customer from inquiry submission up to technical support resolution.</p></div></div>
+    <div class="steps-grid">
+      <article class="step-card card"><i>1</i><h3>Submit Inquiry</h3><p>Fill out the form with product details and upload clear images of the issue.</p></article>
+      <article class="step-card card"><i>2</i><h3>Get Tracking Number</h3><p>Save the generated tracking number shown after the form is submitted.</p></article>
+      <article class="step-card card"><i>3</i><h3>Message Support Page</h3><p>Send the tracking number through the official Technical Support Facebook Page.</p></article>
+      <article class="step-card card"><i>4</i><h3>Receive Support</h3><p>The assigned support staff accepts the ticket and updates its status until resolved.</p></article>
+    </div>
+   </div>
+  </section>
+
+  <section class="section" id="submit">
+   <div class="shell">
+    <div class="section-title"><span class="icon-box">✎</span><div><h2>Submit a New Inquiry</h2><p>Use this form to create a technical support ticket and receive your tracking number.</p></div></div>
+    <div class="inquiry-layout">
+      <div class="card panel">
+        <form id="customerForm">
+          <div class="form-row">
+            <label>Full Name *<input id="cName" required placeholder="Enter your full name"></label>
+            <label>Email Address *<input id="cEmail" required type="email" placeholder="Enter your email address"></label>
+            <label>Contact Number<input id="cPhone" placeholder="09XXXXXXXXX"></label>
+            <label>Product Category *<select id="cCategory" required ${productCategories().length?'':'disabled'}>${productCategoryOptions()}</select><span class="muted small">${productCategories().length?'Categories are managed by the Main Admin.':'No category has been configured yet. Please contact support.'}</span></label>
+            <label style="grid-column:1/-1">Model / Serial Number *<input id="cSerial" required placeholder="Enter product model or serial number"></label>
+          </div>
+          <label style="margin-top:14px">Concern Description *<textarea id="cDescription" required maxlength="1000" placeholder="Describe the issue, what happened, and what troubleshooting you already tried."></textarea><span class="muted small" id="descCounter">0 / 1000</span></label>
+          <div class="upload-area" id="uploadArea" tabindex="0" style="margin-top:14px">
+            <span class="icon-box">☁</span>
+            <div><strong>Upload Images Only (JPG, PNG, WEBP)</strong><p>Maximum 3 files, 2 MB each. Clear screenshots or photos only.</p></div>
+            <button type="button" class="btn btn-light btn-sm" id="chooseFiles">Choose Images</button>
+            <input hidden id="imageInput" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+          </div>
+          <div id="fileChips"></div>
+          <div class="info-note">ⓘ For additional follow-up screenshots or multiple files, use the Technical Support Facebook Page after receiving your tracking number.</div>
+          <button class="btn btn-primary btn-full" type="submit" style="margin-top:14px">Submit Inquiry</button>
+          <div id="submitResult" style="margin-top:14px"></div>
+        </form>
+      </div>
+      <aside class="card panel">
+        <div class="section-title"><span class="icon-box">✓</span><div><h2>Before You Submit</h2><p>Make the ticket easier to process by providing complete details.</p></div></div>
+        <ul style="margin:0;padding-left:18px;line-height:1.9;color:#53647d;font-size:14px">
+          <li>Use a valid email address for tracking.</li>
+          <li>Enter the correct model or serial number.</li>
+          <li>Describe the issue as clearly as possible.</li>
+          <li>Upload at least one clear screenshot or photo.</li>
+          <li>After receiving the tracking number, message the Page chat.</li>
+        </ul>
+      </aside>
+    </div>
+   </div>
+  </section>
+
+  <section class="section" id="track">
+   <div class="shell">
+    <div class="section-title"><span class="icon-box">⌕</span><div><h2>Track Your Ticket</h2><p>Enter your tracking number and submission email to view the latest status.</p></div></div>
+    <div class="inquiry-layout">
+      <div class="card panel">
+        <form id="trackingForm" class="form-row">
+          <label>Tracking Number<input id="trackId" required placeholder="SMX-TS-2026-0001"></label>
+          <label>Email Address<input id="trackEmail" type="email" required placeholder="Enter your email"></label>
+          <div style="grid-column:1/-1"><button class="btn btn-primary">Track Now</button></div>
+        </form>
+        <div class="tracking-result" id="trackingResult"><div class="empty">The ticket status, assigned support, and Business Suite assignment status will appear here. After tracking a ticket, this section refreshes automatically every 15 seconds.</div></div>
+      </div>
+      <aside class="card panel">
+        <div class="section-title"><span class="icon-box">👥</span><div><h2>Support Queue Preview</h2><p>Live preview of available technical support members in this demo.</p></div></div>
+        <div class="queue-preview">
+          ${techs.map(t=>`<div class="queue-line"><span class="avatar">${initials(t.name)}</span><span><strong>${esc(t.name)}</strong><small>● Active</small></span><b>${state.tickets.filter(x=>x.assignedTo===t.id&&x.status!=='Resolved').length}</b></div>`).join('') || '<div class="empty">No technical support accounts available.</div>'}
+        </div>
+      </aside>
+    </div>
+   </div>
+  </section>
+
+  <section class="section" id="support">
+   <div class="shell">
+    <div class="banner card">
+      <span class="icon-box">💬</span>
+      <div><b style="display:block;font-size:18px;color:#1551b8">Continue the conversation on our Technical Support Facebook Page.</b><span class="muted">Send your tracking number first, then provide additional details and screenshots in the Page chat.</span></div>
+      <button class="btn btn-primary" id="pageChatBtn">Message Support Page</button>
+    </div>
+   </div>
+  </section>
+
+  <section class="section">
+   <div class="shell">
+    <div class="support-cards">
+      <article class="support-card card"><span class="icon-box">🔒</span><h3>Secure & Confidential</h3><p>Ticket tracking uses your tracking number and email address so only the correct customer can view the ticket details.</p></article>
+      <article class="support-card card"><span class="icon-box">⏱</span><h3>Clear Tracking</h3><p>Know whether the inquiry is waiting, accepted, assigned in Business Suite, in progress, or already resolved.</p></article>
+      <article class="support-card card"><span class="icon-box">👤</span><h3>Assigned Support</h3><p>Once claimed, the assigned support member’s name appears in the customer tracking view.</p></article>
+    </div>
+   </div>
+  </section>
+ </main>
+ <footer class="customer-footer">
+  <div class="shell footer-grid">
+    <a class="brand" href="#home"><span class="brand-mark"><span>S</span></span><span><strong>SUPERMAX</strong><small>TECHNICAL SUPPORT</small></span></a>
+    <div class="footer-item"><b>Image-only uploads</b><small>Helps keep storage lightweight.</small></div>
+    <div class="footer-item"><b>Page Chat Workflow</b><small>Conversation continues on Facebook Page.</small></div>
+    <div class="footer-highlight"><b>Need the admin portal?</b><small><a href="${portalUrl('admin')}" style="text-decoration:none">Open the Admin / Technical Support login.</a></small></div>
+  </div>
+ </footer>`;
+ wireCustomer();
+ applyBranding();
+}
+
+function wireCustomer(){
+ $('#mobileMenu').onclick=()=>$('#customerLinks').classList.toggle('open');
+ $$('[data-scroll]').forEach(b=>b.onclick=()=>$(b.dataset.scroll)?.scrollIntoView({behavior:'smooth'}));
+ $$('.customer-links a').forEach(a=>a.onclick=()=>$('#customerLinks').classList.remove('open'));
+ $('#pageChatBtn').onclick=openPageChat;
+ $('#pageChatBtnHero').onclick=openPageChat;
+ $('#cDescription').oninput=e=>$('#descCounter').textContent=e.target.value.length+' / 1000';
+ const area=$('#uploadArea'), input=$('#imageInput');
+ $('#chooseFiles').onclick=e=>{e.stopPropagation();input.click()};
+ area.onclick=()=>input.click();
+ area.onkeydown=e=>{if(e.key==='Enter'||e.key===' ')input.click()};
+ ['dragenter','dragover'].forEach(ev=>area.addEventListener(ev,e=>{e.preventDefault();area.classList.add('drag')}));
+ ['dragleave','drop'].forEach(ev=>area.addEventListener(ev,e=>{e.preventDefault();area.classList.remove('drag')}));
+ area.addEventListener('drop',e=>setFiles([...e.dataTransfer.files]));
+ input.onchange=()=>setFiles([...input.files]);
+
+ function setFiles(files){
+   const allowed=['image/jpeg','image/png','image/webp'];
+   const errors=[];
+   if(files.length>3)errors.push('Maximum of 3 images only.');
+   selectedFiles=files.slice(0,3).filter(f=>{
+     if(!allowed.includes(f.type)){errors.push(f.name+': invalid file type');return false}
+     if(f.size>2*1024*1024){errors.push(f.name+': exceeds 2 MB');return false}
+     return true;
+   });
+   $('#fileChips').innerHTML=selectedFiles.map(f=>`<span class="file-chip">${esc(f.name)}</span>`).join('');
+   if(errors.length)notify(errors.join(' · '),'error');
+ }
+ $('#customerForm').onsubmit=e=>{
+   e.preventDefault();
+   if(!e.currentTarget.reportValidity())return;
+   refreshSLA();
+   const tech=nextTech();
+   const id=nextTicketId();
+   const t={
+    id,name:$('#cName').value.trim(),email:$('#cEmail').value.trim(),phone:$('#cPhone').value.trim(),
+    category:$('#cCategory').value,serial:$('#cSerial').value.trim(),description:$('#cDescription').value.trim(),
+    images:selectedFiles.map(f=>f.name),createdAt:Date.now(),lastUpdatedAt:Date.now(),status:'New',
+    assignedTo:null,assignedName:null,acceptedAt:null,chatAssignedAt:null,firstReplyAt:null,resolvedAt:null,
+    currentOffer:tech?{userId:tech.id,offeredAt:Date.now()}:null,offerHistory:[]
+   };
+   state.tickets.unshift(t);
+   log(id+' submitted by '+t.name+'.'+(tech?' Offered to '+tech.name+'.':''));
+   save(state);
+   $('#submitResult').innerHTML=`<div class="success-box"><span>Your tracking number</span><strong>${id}</strong><p style="margin:0 0 10px">Save this number and send it in the Technical Support Page chat.</p><button type="button" class="btn btn-success btn-sm" id="trackCreated">Track This Ticket</button></div>`;
+   $('#trackId').value=id;$('#trackEmail').value=t.email;
+   $('#trackCreated').onclick=()=>{showTracking(t,true);$('#track').scrollIntoView({behavior:'smooth'})};
+   e.currentTarget.reset();selectedFiles=[];$('#fileChips').innerHTML='';$('#descCounter').textContent='0 / 1000';
+   notify('Inquiry submitted: '+id,'success');
+ }
+ $('#trackingForm').onsubmit=e=>{
+   e.preventDefault();
+   refreshSLA(); state=load();
+   const id=$('#trackId').value.trim().toUpperCase(), email=$('#trackEmail').value.trim().toLowerCase();
+   const t=state.tickets.find(x=>x.id===id && x.email.toLowerCase()===email);
+   if(!t){clearAutoRefresh();trackedTicketId='';trackedTicketEmail='';$('#trackingResult').innerHTML='<div class="empty">No ticket found. Check the tracking number and email address.</div>';return}
+   showTracking(t,true);
+ }
+}
+function showTracking(t,startTimer=true){
+ state=load();
+ const fresh=state.tickets.find(x=>x.id===t.id)||t;
+ const staff=user(fresh.assignedTo), step=selectedStep(fresh);
+ $('#trackingResult').innerHTML=`<div class="tracking-card">
+   <h3>${esc(fresh.id)}</h3>
+   <span class="status ${slug(fresh.status)}">${esc(fresh.status)}</span>
+   <div class="tracking-refresh">
+    <span><i class="auto-refresh-dot"></i><b id="customerAutoRefreshLabel">Auto-refresh in ${autoRefreshSeconds}s</b></span>
+    <button type="button" class="btn btn-light btn-sm" id="trackingManualRefresh">Refresh Now</button>
+   </div>
+   <div class="progress-line">
+    <span class="done">Submitted</span>
+    <span class="${step>=2?'done':''}">Accepted</span>
+    <span class="${step>=3?'done':''}">In Progress</span>
+    <span class="${step>=4?'done':''}">Resolved</span>
+   </div>
+   <dl class="tracking-details">
+    <dt>Customer</dt><dd>${esc(fresh.name)}</dd>
+    <dt>Product</dt><dd>${esc(fresh.category)}</dd>
+    <dt>Model / Serial</dt><dd>${esc(fresh.serial)}</dd>
+    <dt>Assigned Support</dt><dd>${staff?esc(staff.name):'Waiting for support acceptance'}</dd>
+    <dt>Business Suite</dt><dd>${fresh.chatAssignedAt?'Assigned in Page chat':'Pending manual assignment'}</dd>
+    <dt>Last Updated</dt><dd>${fmt(fresh.lastUpdatedAt)}</dd>
+   </dl>
+   <button class="btn btn-primary btn-full" id="trackingChatBtn" style="margin-top:12px">Message Technical Support Page</button>
+ </div>`;
+ $('#trackingChatBtn').onclick=openPageChat;
+ $('#trackingManualRefresh').onclick=()=>refreshTrackedTicket(true);
+ if(startTimer)startCustomerAutoRefresh(fresh.id,fresh.email);
+}
+
+function renderAdminLogin(){
+ clearAutoRefresh();
+ document.title='Supermax Technical Support — Admin Login';
+ $('#app').innerHTML=`<main class="admin-login">
+   <section class="login-info">
+     <a class="brand" href="${portalUrl('')}"><span class="brand-mark"><span>S</span></span><span><strong>SUPERMAX</strong><small>TECHNICAL SUPPORT</small></span></a>
+     <h1>Admin & Technical<br><span>Support Portal</span></h1>
+     <p>This portal is separated from the customer website. Each technical support member signs in using the username and password created by the Main Admin.</p>
+     <div class="login-points">
+       <article><b>Tab-based layout</b><small>Overview, Inquiry Queue, Team Reports, Technical Accounts, and Settings are shown per tab.</small></article>
+       <article><b>Dynamic technical accounts</b><small>Add or remove support users anytime.</small></article>
+       <article><b>Individual monitoring</b><small>Track accepted, missed, unanswered, and resolved tickets.</small></article>
+       <article><b>Manual Business Suite handoff</b><small>Confirm Page chat assignment after ticket acceptance.</small></article>
+     </div>
+   </section>
+   <section class="login-box-wrap">
+     <div class="login-box card">
+       <h2>Sign In</h2>
+       <p>Enter your assigned username and password.</p>
+       <form id="loginForm">
+         <label>Username<input id="loginUser" required autocomplete="username" placeholder="Enter username"></label>
+         <label>Password<div class="password-wrap"><input id="loginPass" type="password" required autocomplete="current-password" placeholder="Enter password"><button type="button" id="togglePass">Show</button></div></label>
+         <button class="btn btn-primary btn-full">Sign In</button>
+         <div id="loginError" class="small" style="color:var(--red);font-weight:900;min-height:18px"></div>
+       </form>
+       <div class="login-hint"><b>Default demo accounts</b><br>Main Admin: <code>mainadmin</code> / <code>Admin123</code><br>Technical Support: <code>jane</code> / <code>Support123</code></div>
+       <button class="btn btn-light btn-full" id="backToLauncher" style="margin-top:10px">Back to Portal Selector</button>
+     </div>
+   </section>
+ </main>`;
+ $('#togglePass').onclick=()=>{const p=$('#loginPass');p.type=p.type==='password'?'text':'password';$('#togglePass').textContent=p.type==='password'?'Show':'Hide'};
+ $('#backToLauncher').onclick=()=>location.href=portalUrl('');
+  applyBranding();
+ $('#loginForm').onsubmit=e=>{
+   e.preventDefault();
+   state=load();
+   const un=$('#loginUser').value.trim().toLowerCase(), pw=$('#loginPass').value;
+   const found=state.users.find(u=>u.active && u.username.toLowerCase()===un && u.password===pw);
+   if(!found){$('#loginError').textContent='Incorrect username or password.';return}
+   sessionStorage.setItem(SESSION,found.id);currentUser=found;log(found.name+' signed in.');save(state);renderAdmin();
+ }
+}
+
+function renderAdmin(){
+ clearAutoRefresh();
+ state=load(); refreshSLA(); state=load();
+ currentUser=user(sessionStorage.getItem(SESSION));
+ if(!currentUser||!currentUser.active){sessionStorage.removeItem(SESSION);renderAdminLogin();return}
+ const isAdmin=currentUser.role==='admin';
+ document.title='Supermax Technical Support — Admin Portal';
+ $('#app').innerHTML=`<header class="admin-topbar">
+    <a class="brand" href="#"><span class="brand-mark"><span>S</span></span><span><strong>SUPERMAX</strong><small>TECHNICAL SUPPORT</small></span></a>
+    <div class="admin-title"><b>Support Operations Portal</b><small>Separated views for better readability and easier navigation</small></div>
+    <div class="admin-user"><span class="avatar">${initials(currentUser.name)}</span><div><b>${esc(currentUser.name)}</b><small>${roleName(currentUser)}</small></div><button class="btn btn-light btn-sm" id="logoutBtn">Logout</button></div>
+  </header>
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <nav id="adminTabs">
+        <div class="side-label">SUPPORT OPERATIONS</div>
+        <a href="#" class="admin-tab active" data-tab="overview">▦ Overview</a>
+        <a href="#" class="admin-tab" data-tab="queue">☷ Inquiry Queue</a>
+        <a href="#" class="admin-tab" data-tab="reports">▥ Team Reports</a>
+        ${isAdmin?'<div class="side-label">ADMINISTRATION</div><a href="#" class="admin-tab" data-tab="accounts">👥 Technical Accounts</a><a href="#" class="admin-tab" data-tab="categories">▦ Product Categories</a><a href="#" class="admin-tab" data-tab="settings">⚙ Settings</a>':''}
+      </nav>
+      <div class="side-box"><b>${roleName(currentUser)}</b><small>${isAdmin?'Full access to team accounts and settings.':'Can accept available inquiries and manage assigned tickets.'}</small></div>
+    </aside>
+    <main class="admin-main">
+      <div class="admin-toolbar">
+        <div><span class="eyebrow">${isAdmin?'Main Admin View':'Technical Support View'}</span><h1>${isAdmin?'Support Dashboard':'My Support Workspace'}</h1><p>${isAdmin?'Use the tabs to move between overview, inquiry queue, reports, accounts, product categories, and settings.':'Use the tabs to check overview, available inquiries, and your performance report.'}</p></div>
+        <div class="admin-tools"><span class="auto-refresh-pill"><i class="auto-refresh-dot"></i><span id="adminAutoRefreshLabel">Auto-refresh in 15s</span></span><button class="btn btn-light btn-sm" id="refreshBtn">Refresh Now</button>${isAdmin?'<button class="btn btn-outline btn-sm" id="exportBtn">Export CSV</button><button class="btn btn-danger btn-sm" id="resetBtn">Reset Demo</button>':''}</div>
+      </div>
+
+      <section class="kpis">
+        <article class="kpi card"><span>Unaccepted</span><strong id="kUnaccepted">0</strong><small>Still waiting for support</small></article>
+        <article class="kpi card"><span>Missed Offers</span><strong id="kMissed" style="color:var(--red)">0</strong><small>Exceeded acceptance SLA</small></article>
+        <article class="kpi card"><span>No First Reply</span><strong id="kNoReply" style="color:var(--orange)">0</strong><small>Accepted but unanswered</small></article>
+        <article class="kpi card"><span>Active</span><strong id="kActive" style="color:var(--blue)">0</strong><small>Accepted and in progress</small></article>
+        <article class="kpi card"><span>Resolved</span><strong id="kResolved" style="color:var(--green)">0</strong><small>Completed tickets</small></article>
+      </section>
+
+      <section class="admin-view active" id="view-overview">
+        <div class="view-grid">
+          <div class="view-stack">
+            <section class="admin-panel card">
+              <div class="panel-head"><div><h2>Priority Summary</h2><p>Quick look at the most urgent concerns in the system.</p></div></div>
+              <div class="stat-grid-2">
+                <div class="card admin-panel" style="box-shadow:none"><h3 style="margin:0 0 6px;color:var(--red)">Missed Inquiries</h3><p class="muted">Tickets whose first assigned support offer exceeded the SLA.</p><strong style="font-size:32px;color:var(--red)" id="ovMissed">0</strong></div>
+                <div class="card admin-panel" style="box-shadow:none"><h3 style="margin:0 0 6px;color:var(--orange)">Unanswered Tickets</h3><p class="muted">Accepted but still without first reply.</p><strong style="font-size:32px;color:var(--orange)" id="ovNoReply">0</strong></div>
+              </div>
+            </section>
+            <section class="admin-panel card">
+              <div class="panel-head"><div><h2>Recent Activity</h2><p>Latest actions in the system.</p></div></div>
+              <div class="activity-list" id="activityList"></div>
+            </section>
+          </div>
+          <div class="view-stack">
+            <section class="admin-panel card">
+              <div class="panel-head"><div><h2>Selected Ticket Workflow</h2><p>Choose a ticket from the queue tab, then manage it here.</p></div></div>
+              <div class="workflow">
+                <article><span>1</span><div><h4>Inquiry Received</h4><p>Customer submits form and gets a tracking number.</p></div></article>
+                <article><span>2</span><div><h4>Accepted by Support</h4><p>The ticket is claimed by a technical support account.</p></div></article>
+                <article><span>3</span><div><h4>Assigned in Business Suite</h4><p>Main Admin or support confirms the Page chat assignment.</p></div></article>
+                <article><span>4</span><div><h4>First Reply and Resolution</h4><p>Support sends first reply, works on the issue, and marks it resolved.</p></div></article>
+              </div>
+              <div class="ticket-focus" id="selectedTicketBox"><div class="empty">Select a ticket in the Inquiry Queue tab to manage it here.</div></div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="admin-view" id="view-queue">
+        <section class="admin-panel card">
+          <div class="panel-head"><div><h2>${isAdmin?'Inquiry Queue':'Available & My Inquiries'}</h2><p>Select a ticket, accept it, or update its status.</p></div><div class="filters"><input id="queueSearch" placeholder="Search ID, customer, product"><select id="queueFilter"><option value="all">All statuses</option><option>New</option><option>Accepted</option><option>In Progress</option><option>Waiting Customer</option><option>Resolved</option></select></div></div>
+          <div class="mobile-scroll-note">Swipe left or right to view all table columns.</div><div class="table-wrap">
+            <table>
+              <thead><tr><th>Inquiry</th><th>Customer</th><th>Product</th><th>Waiting</th><th>Current Offer</th><th>Status</th><th>Assigned</th><th>Actions</th></tr></thead>
+              <tbody id="queueRows"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section class="admin-view" id="view-reports">
+        <div class="view-grid">
+          <section class="admin-panel card">
+            <div class="panel-head"><div><h2>Technical Support Performance</h2><p>Per-user report based on the current local demo data.</p></div></div>
+            <div class="mobile-scroll-note">Swipe left or right to view the complete team report.</div><div class="table-wrap">
+              <table>
+                <thead><tr><th>Technical Support</th><th>Username</th><th>Accepted</th><th>Missed Offers</th><th>No First Reply</th><th>Resolved</th></tr></thead>
+                <tbody id="reportRows"></tbody>
+              </table>
+            </div>
+          </section>
+          <section class="admin-panel card">
+            <div class="panel-head"><div><h2>Active Technical Accounts</h2><p>Live summary of all current support accounts.</p></div></div>
+            <div class="team-list" id="teamList"></div>
+          </section>
+        </div>
+      </section>
+
+      ${isAdmin?`
+      <section class="admin-view" id="view-accounts">
+        <div class="user-layout">
+          <section class="admin-panel card">
+            <div class="account-form">
+              <h3 id="accountFormTitle">Add Technical Support Account</h3>
+              <form id="accountForm">
+                <label>Full Name *<input id="uName" required placeholder="e.g. Juan Dela Cruz"></label>
+                <label>Username *<input id="uUsername" required minlength="3" placeholder="Create a unique username"></label>
+                <label>Password *<div class="password-wrap"><input id="uPassword" required minlength="6" type="password" placeholder="At least 6 characters"><button type="button" id="toggleUserPass">Show</button></div></label>
+                <div id="accountError" style="min-height:18px;color:var(--red);font-weight:900;font-size:12px"></div>
+                <div class="form-actions">
+                  <button class="btn btn-primary btn-sm" id="saveAccountBtn">Add Account</button>
+                  <button class="btn btn-light btn-sm" type="button" id="cancelEdit" hidden>Cancel Edit</button>
+                </div>
+              </form>
+              <div class="account-note" style="margin-top:14px">Main Admin can create unlimited technical support accounts. New users can log in immediately using the exact username and password you set here.</div>
+            </div>
+          </section>
+          <section class="admin-panel card">
+            <div class="panel-head"><div><h2>Technical Support User List</h2><p>Edit or delete accounts anytime. If a deleted user has active tickets, those tickets return to the unassigned queue.</p></div></div>
+            <div class="mobile-scroll-note">Swipe left or right to manage all account details.</div><div class="table-wrap">
+              <table>
+                <thead><tr><th>Technical Support</th><th>Username</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
+                <tbody id="userRows"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="admin-view" id="view-categories">
+        <div class="user-layout">
+          <section class="admin-panel card">
+            <div class="account-form">
+              <h3 id="categoryFormTitle">Add Product Category</h3>
+              <form id="categoryForm">
+                <label>Category Name *
+                  <input id="categoryName" required maxlength="80" placeholder="e.g. Deye Inverter">
+                </label>
+                <div id="categoryError" style="min-height:18px;color:var(--red);font-weight:900;font-size:12px"></div>
+                <div class="form-actions">
+                  <button class="btn btn-primary btn-sm" id="saveCategoryBtn">Add Category</button>
+                  <button class="btn btn-light btn-sm" type="button" id="cancelCategoryEdit" hidden>Cancel Edit</button>
+                </div>
+              </form>
+              <div class="account-note" style="margin-top:14px">
+                These categories automatically appear in the Product Category dropdown on the customer inquiry form. Existing tickets keep their original category even when a category is edited or deleted.
+              </div>
+            </div>
+          </section>
+          <section class="admin-panel card">
+            <div class="panel-head">
+              <div>
+                <h2>Customer Product Categories</h2>
+                <p>Add only the products or systems that Supermax actually supports.</p>
+              </div>
+              <span class="role-pill" id="categoryCount">0 Categories</span>
+            </div>
+            <div class="mobile-scroll-note">Swipe left or right to view category actions.</div><div class="table-wrap">
+              <table>
+                <thead><tr><th>Order</th><th>Category Name</th><th>Used by Existing Tickets</th><th>Actions</th></tr></thead>
+                <tbody id="categoryRows"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="admin-view" id="view-settings">
+        <div class="view-stack">
+          <section class="admin-panel card">
+            <div class="panel-head">
+              <div><h2>Website Branding</h2><p>Customize the logo and name shown in the customer and admin portals.</p></div>
+              <span class="role-pill">Main Admin Only</span>
+            </div>
+            ${brandingPreviewHtml()}
+            <div class="form-row">
+              <label>Website / Page Name *
+                <input id="websiteName" maxlength="40" placeholder="e.g. SUPERMAX">
+              </label>
+              <label>Website Subtitle *
+                <input id="websiteSubtitle" maxlength="50" placeholder="e.g. TECHNICAL SUPPORT">
+              </label>
+            </div>
+            <div class="logo-upload-box" style="margin-top:14px">
+              <label>Upload Website Logo
+                <input id="websiteLogoInput" type="file" accept="image/jpeg,image/png,image/webp">
+              </label>
+              <small>Allowed formats: JPG, PNG, or WEBP. Recommended square logo. Maximum file size: 1 MB. The demo stores the logo only in this browser.</small>
+              <div class="form-actions" style="margin-top:10px">
+                <button type="button" class="btn btn-light btn-sm" id="removeLogoBtn">Remove Custom Logo</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="admin-panel card">
+            <div class="panel-head"><div><h2>Support System Settings</h2><p>Customize the Page URL and acceptance SLA for this demo.</p></div></div>
+            <div class="form-row">
+              <label>Technical Support Facebook Page URL<input id="pageUrl" placeholder="https://m.me/yourpageusername"></label>
+              <label>Acceptance SLA (minutes)<input id="slaMinutes" type="number" min="5" max="1440"></label>
+            </div>
+            <div class="form-actions" style="margin-top:14px">
+              <button class="btn btn-primary" id="saveSettingsBtn">Save All Settings</button>
+            </div>
+          </section>
+        </div>
+      </section>`:''}
+    </main>
+  </div>`;
+ wireAdmin(isAdmin);
+ renderAdminData(isAdmin);
+ startAdminAutoRefresh(isAdmin);
+ applyBranding();
+}
+function wireAdmin(isAdmin){
+ $('#logoutBtn').onclick=()=>{sessionStorage.removeItem(SESSION);currentUser=null;renderAdminLogin()};
+ $('#refreshBtn').onclick=()=>{refreshSLA();state=load();renderAdminData(isAdmin);autoRefreshSeconds=15;setAdminRefreshLabel('Auto-refresh in 15s');notify('Dashboard refreshed.','success')};
+ if(isAdmin){
+   $('#exportBtn').onclick=exportCSV;
+   $('#resetBtn').onclick=()=>{if(confirm('Reset all demo data?')){state=seed();save(state);sessionStorage.setItem(SESSION,'admin-root');currentUser=user('admin-root');selectedTicketId=null;editUserId=null;editCategoryId=null;renderAdmin();notify('Demo data reset.','success')}};
+   $('#toggleUserPass').onclick=()=>{const p=$('#uPassword');p.type=p.type==='password'?'text':'password';$('#toggleUserPass').textContent=p.type==='password'?'Show':'Hide'};
+   $('#cancelEdit').onclick=resetUserForm;
+   $('#accountForm').onsubmit=saveUser;
+   $('#userRows').onclick=handleUserActions;
+   $('#categoryForm').onsubmit=saveCategory;
+   $('#categoryRows').onclick=handleCategoryActions;
+   $('#cancelCategoryEdit').onclick=resetCategoryForm;
+   $('#websiteName').addEventListener('input',()=>{settingsDirty=true;updateBrandingPreview()});
+   $('#websiteSubtitle').addEventListener('input',()=>{settingsDirty=true;updateBrandingPreview()});
+   $('#websiteLogoInput').addEventListener('change',handleLogoSelection);
+   $('#removeLogoBtn').onclick=removeCustomLogo;
+   $('#pageUrl').addEventListener('input',()=>settingsDirty=true);
+   $('#slaMinutes').addEventListener('input',()=>settingsDirty=true);
+   $('#saveSettingsBtn').onclick=saveSettings;
+ }
+ $$('#adminTabs .admin-tab').forEach(tab=>tab.onclick=e=>{
+   e.preventDefault();
+   $$('#adminTabs .admin-tab').forEach(x=>x.classList.remove('active'));
+   tab.classList.add('active');
+   showAdminTab(tab.dataset.tab);
+ });
+ $('#queueSearch')?.addEventListener('input',()=>renderQueue(isAdmin));
+ $('#queueFilter')?.addEventListener('change',()=>renderQueue(isAdmin));
+ $('#queueRows')?.addEventListener('click',e=>handleTicketActions(e,isAdmin));
+ $('#selectedTicketBox')?.addEventListener('click',e=>handleTicketWorkflow(e,isAdmin));
+}
+function showAdminTab(name){
+ $$('.admin-view').forEach(v=>v.classList.remove('active'));
+ $('#view-'+name)?.classList.add('active');
+}
+function visibleTickets(isAdmin){
+ return isAdmin?state.tickets:state.tickets.filter(t=>!t.assignedTo||t.assignedTo===currentUser.id);
+}
+function renderAdminData(isAdmin){
+ state=load(); refreshSLA(); state=load(); currentUser=user(currentUser.id);
+ const list=visibleTickets(isAdmin);
+ $('#kUnaccepted').textContent=list.filter(t=>!t.assignedTo&&t.status!=='Resolved').length;
+ $('#kMissed').textContent=isAdmin?state.tickets.reduce((n,t)=>n+t.offerHistory.filter(o=>o.missedAt).length,0):missedCount(currentUser.id);
+ $('#kNoReply').textContent=isAdmin?state.tickets.filter(t=>t.assignedTo&&!t.firstReplyAt&&t.status!=='Resolved').length:noReplyCount(currentUser.id);
+ $('#kActive').textContent=list.filter(t=>t.assignedTo&&t.status!=='Resolved').length;
+ $('#kResolved').textContent=isAdmin?state.tickets.filter(t=>t.status==='Resolved').length:resolvedCount(currentUser.id);
+ $('#ovMissed') && ($('#ovMissed').textContent=isAdmin?state.tickets.reduce((n,t)=>n+t.offerHistory.filter(o=>o.missedAt).length,0):missedCount(currentUser.id));
+ $('#ovNoReply') && ($('#ovNoReply').textContent=isAdmin?state.tickets.filter(t=>t.assignedTo&&!t.firstReplyAt&&t.status!=='Resolved').length:noReplyCount(currentUser.id));
+ renderActivity();
+ renderQueue(isAdmin);
+ renderReports();
+ renderTeam();
+ renderSelectedTicket(isAdmin);
+ if(isAdmin){
+   renderUsers();
+   renderCategories();
+   if(!settingsDirty){
+     $('#websiteName').value=brandName();
+     $('#websiteSubtitle').value=brandSubtitle();
+     $('#pageUrl').value=state.settings.pageUrl||'';
+     $('#slaMinutes').value=state.settings.slaMinutes||DEFAULT_SLA;
+     updateBrandingPreview();
+   }
+ }
+}
+function renderActivity(){
+ $('#activityList').innerHTML=state.activity.slice(0,10).map(a=>`<article class="activity-item"><b>${esc(a.message)}</b><small>${fmt(a.at)}</small></article>`).join('') || '<div class="empty">No recent activity.</div>';
+}
+function renderQueue(isAdmin){
+ const search=($('#queueSearch')?.value||'').trim().toLowerCase();
+ const filter=($('#queueFilter')?.value||'all');
+ const rows=visibleTickets(isAdmin).filter(t=>{
+   const hay=`${t.id} ${t.name} ${t.category} ${t.serial}`.toLowerCase();
+   return (!search || hay.includes(search)) && (filter==='all' || t.status===filter);
+ });
+ $('#queueRows').innerHTML=rows.map(t=>{
+   const canAccept=!t.assignedTo && currentUser.role==='tech';
+   const canAssign=isAdmin && !t.assignedTo;
+   return `<tr data-id="${t.id}">
+    <td><b>${esc(t.id)}</b><small>${t.offerHistory.filter(o=>o.missedAt).length} missed offer(s)</small></td>
+    <td>${esc(t.name)}<small>${esc(t.email)}</small></td>
+    <td>${esc(t.category)}<small>${esc(t.serial)}</small></td>
+    <td>${wait(Date.now()-t.createdAt)}</td>
+    <td>${t.currentOffer?esc(currentOfferName(t)):'—'}</td>
+    <td><span class="status ${slug(t.status)}">${esc(t.status)}</span></td>
+    <td>${esc(user(t.assignedTo)?.name || t.assignedName || 'Unassigned')}</td>
+    <td><div class="action-row">
+      ${canAccept?'<button class="btn btn-gold btn-sm" data-action="accept">Accept</button>':''}
+      ${canAssign?'<button class="btn btn-light btn-sm" data-action="assign">Assign</button>':''}
+      <button class="btn btn-light btn-sm" data-action="select">Manage</button>
+      <button class="btn btn-outline btn-sm" data-action="view">View</button>
+    </div></td>
+   </tr>`;
+ }).join('') || '<tr><td colspan="8" class="muted">No inquiries match the selected filters.</td></tr>';
+}
+function handleTicketActions(e,isAdmin){
+ const btn=e.target.closest('button'); if(!btn) return;
+ const tr=btn.closest('tr'); const t=state.tickets.find(x=>x.id===tr.dataset.id); if(!t) return;
+ if(btn.dataset.action==='accept'){acceptTicket(t,currentUser,false); return;}
+ if(btn.dataset.action==='assign'){
+   const techs=techUsers();
+   if(!techs.length){notify('No technical support account available.','error');return;}
+   const options=techs.map((u,i)=>`${i+1}. ${u.name} (${u.username})`).join('\n');
+   const ans=prompt('Assign this inquiry to which technical support account?\n\n'+options);
+   const chosen=techs[Number(ans)-1] || techs.find(u=>u.username.toLowerCase()===String(ans||'').trim().toLowerCase());
+   if(chosen){acceptTicket(t,chosen,true);} else if(ans!==null){notify('Technical support account not found.','error');}
+   return;
+ }
+ if(btn.dataset.action==='select'){selectedTicketId=t.id;renderSelectedTicket(isAdmin);showAdminTab('overview');return;}
+ if(btn.dataset.action==='view'){showTicketDialog(t);return;}
+}
+function acceptTicket(t,staff,adminAssigned){
+ t.assignedTo=staff.id;t.assignedName=staff.name;t.acceptedAt=Date.now();t.lastUpdatedAt=Date.now();t.status='Accepted';
+ if(t.currentOffer){t.offerHistory.push({userId:t.currentOffer.userId,offeredAt:t.currentOffer.offeredAt,acceptedAt:Date.now(),missedAt:null});}
+ t.currentOffer=null;
+ selectedTicketId=t.id;
+ log(t.id+(adminAssigned?' assigned to ':' accepted by ')+staff.name+'.');
+ save(state);
+ renderAdminData(currentUser.role==='admin');
+ notify('Ticket assigned to '+staff.name+'.','success');
+}
+function renderSelectedTicket(isAdmin){
+ const box=$('#selectedTicketBox'); if(!box) return;
+ const t=state.tickets.find(x=>x.id===selectedTicketId);
+ if(!t){box.innerHTML='<div class="empty">Select a ticket in the Inquiry Queue tab to manage it here.</div>'; return;}
+ const canManage=isAdmin || t.assignedTo===currentUser.id;
+ box.innerHTML=`<h3>${esc(t.id)}</h3>
+   <p><span class="status ${slug(t.status)}">${esc(t.status)}</span></p>
+   <p><b>Customer:</b> ${esc(t.name)}</p>
+   <p><b>Concern:</b> ${esc(t.description)}</p>
+   <p><b>Assigned Support:</b> ${esc(user(t.assignedTo)?.name || t.assignedName || 'Unassigned')}</p>
+   <p><b>Business Suite:</b> ${t.chatAssignedAt?'Assigned '+fmt(t.chatAssignedAt):'Pending manual assignment'}</p>
+   <p><b>First Reply:</b> ${t.firstReplyAt?fmt(t.firstReplyAt):'Not yet recorded'}</p>
+   <div class="action-row" style="margin-top:12px">
+     ${canManage && !t.chatAssignedAt?'<button class="btn btn-light btn-sm" data-flow="chat">Confirm Page Chat Assignment</button>':''}
+     ${canManage && !t.firstReplyAt?'<button class="btn btn-primary btn-sm" data-flow="reply">Mark First Reply Sent</button>':''}
+     ${canManage && t.firstReplyAt && t.status!=='Waiting Customer' && t.status!=='Resolved'?'<button class="btn btn-light btn-sm" data-flow="waiting">Waiting for Customer</button>':''}
+     ${canManage && t.status!=='Resolved'?'<button class="btn btn-success btn-sm" data-flow="resolve">Mark Resolved</button>':''}
+     <button class="btn btn-outline btn-sm" data-flow="details">View Full Details</button>
+   </div>`;
+}
+function handleTicketWorkflow(e,isAdmin){
+ const btn=e.target.closest('button'); if(!btn) return;
+ const t=state.tickets.find(x=>x.id===selectedTicketId); if(!t) return;
+ if(btn.dataset.flow==='details'){showTicketDialog(t); return;}
+ if(btn.dataset.flow==='chat'){t.chatAssignedAt=Date.now(); t.lastUpdatedAt=Date.now(); log(t.id+' Page conversation confirmed in Business Suite.');}
+ if(btn.dataset.flow==='reply'){t.firstReplyAt=Date.now(); t.lastUpdatedAt=Date.now(); t.status='In Progress'; log('First reply recorded for '+t.id+'.');}
+ if(btn.dataset.flow==='waiting'){t.status='Waiting Customer'; t.lastUpdatedAt=Date.now(); log(t.id+' is waiting for customer response.');}
+ if(btn.dataset.flow==='resolve'){t.status='Resolved'; t.resolvedAt=Date.now(); t.lastUpdatedAt=Date.now(); log(t.id+' resolved by '+currentUser.name+'.');}
+ save(state); renderAdminData(isAdmin); notify('Ticket updated.','success');
+}
+function renderReports(){
+ $('#reportRows').innerHTML=techUsers().map(u=>`<tr>
+   <td><div style="display:flex;gap:10px;align-items:center"><span class="avatar" style="width:34px;height:34px;font-size:10px">${initials(u.name)}</span><span><b>${esc(u.name)}</b><small>${u.active?'Active':'Inactive'}</small></span></div></td>
+   <td>${esc(u.username)}</td>
+   <td>${acceptedCount(u.id)}</td>
+   <td style="color:var(--red);font-weight:900">${missedCount(u.id)}</td>
+   <td style="color:var(--orange);font-weight:900">${noReplyCount(u.id)}</td>
+   <td style="color:var(--green);font-weight:900">${resolvedCount(u.id)}</td>
+ </tr>`).join('') || '<tr><td colspan="6">No technical support accounts found.</td></tr>';
+}
+function renderTeam(){
+ $('#teamList').innerHTML=techUsers().map(u=>`<article class="team-card">
+   <span class="avatar">${initials(u.name)}</span>
+   <div>
+     <h4>${esc(u.name)} <span class="role-pill">Support</span></h4>
+     <p>@${esc(u.username)}</p>
+     <div class="team-metrics">
+       <span><strong>${acceptedCount(u.id)}</strong>Accepted</span>
+       <span><strong>${missedCount(u.id)}</strong>Missed</span>
+       <span><strong>${noReplyCount(u.id)}</strong>No Reply</span>
+       <span><strong>${resolvedCount(u.id)}</strong>Resolved</span>
+     </div>
+   </div>
+   <span class="status ${u.active?'status-resolved':'status-missed'}">${u.active?'Active':'Inactive'}</span>
+ </article>`).join('') || '<div class="empty">No technical support account available.</div>';
+}
+function renderUsers(){
+ $('#userRows').innerHTML=state.users.filter(u=>u.role==='tech').map(u=>`<tr data-id="${u.id}">
+   <td><div style="display:flex;gap:10px;align-items:center"><span class="avatar" style="width:34px;height:34px;font-size:10px">${initials(u.name)}</span><span><b>${esc(u.name)}</b><small>${acceptedCount(u.id)} accepted · ${missedCount(u.id)} missed</small></span></div></td>
+   <td><b>${esc(u.username)}</b></td>
+   <td><span class="status ${u.active?'status-resolved':'status-missed'}">${u.active?'Active':'Inactive'}</span></td>
+   <td>${fmt(u.createdAt)}</td>
+   <td><div class="action-row"><button class="btn btn-light btn-sm" data-user="edit">Edit</button><button class="btn btn-danger btn-sm" data-user="delete">Delete</button></div></td>
+ </tr>`).join('') || '<tr><td colspan="5">No technical support users found.</td></tr>';
+}
+function resetUserForm(){
+ editUserId=null;
+ $('#accountForm').reset();
+ $('#accountFormTitle').textContent='Add Technical Support Account';
+ $('#saveAccountBtn').textContent='Add Account';
+ $('#cancelEdit').hidden=true;
+ $('#accountError').textContent='';
+}
+function saveUser(e){
+ e.preventDefault();
+ const name=$('#uName').value.trim(), username=$('#uUsername').value.trim().toLowerCase(), password=$('#uPassword').value;
+ $('#accountError').textContent='';
+ if(!name || username.length<3 || password.length<6){$('#accountError').textContent='Complete all fields. Username must be at least 3 characters and password at least 6 characters.'; return;}
+ const duplicate=state.users.find(u=>u.username.toLowerCase()===username && u.id!==editUserId);
+ if(duplicate){$('#accountError').textContent='That username is already in use.'; return;}
+ if(editUserId){
+   const u=user(editUserId); if(!u) return;
+   const old=u.name;
+   u.name=name; u.username=username; u.password=password; u.active=true;
+   state.tickets.forEach(t=>{if(t.assignedTo===u.id)t.assignedName=name; if(t.currentOffer?.userId===u.id){}});
+   log('Technical support account updated: '+old+' → '+name+'.');
+   notify('Account updated.','success');
+ }else{
+   const u={id:uid('tech'),role:'tech',name,username,password,active:true,createdAt:Date.now()};
+   state.users.push(u);
+   log('Technical support account added: '+name+' (@'+username+').');
+   notify('Technical support account added.','success');
+ }
+ save(state); resetUserForm(); renderAdminData(true);
+}
+function handleUserActions(e){
+ const btn=e.target.closest('button'); if(!btn) return;
+ const tr=btn.closest('tr'); const u=user(tr.dataset.id); if(!u) return;
+ if(btn.dataset.user==='edit'){
+   editUserId=u.id;
+   $('#uName').value=u.name; $('#uUsername').value=u.username; $('#uPassword').value=u.password;
+   $('#accountFormTitle').textContent='Edit Technical Support Account';
+   $('#saveAccountBtn').textContent='Save Changes';
+   $('#cancelEdit').hidden=false;
+   showAdminTab('accounts');
+   window.scrollTo({top:0,behavior:'smooth'});
+ }
+ if(btn.dataset.user==='delete'){
+   const activeTickets=state.tickets.filter(t=>t.assignedTo===u.id && t.status!=='Resolved');
+   if(!confirm(`Delete ${u.name}'s account? ${activeTickets.length} active ticket(s) will return to the unassigned queue.`)) return;
+   activeTickets.forEach(t=>{
+     t.assignedTo=null; t.assignedName=null; t.acceptedAt=null; t.chatAssignedAt=null; t.firstReplyAt=null; t.status='New'; t.lastUpdatedAt=Date.now();
+     offerTicket(t,[u.id]);
+   });
+   state.tickets.forEach(t=>{if(t.currentOffer?.userId===u.id){t.currentOffer=null; offerTicket(t,[u.id]);}});
+   state.users=state.users.filter(x=>x.id!==u.id);
+   log('Technical support account deleted: '+u.name+'.');
+   if(editUserId===u.id) resetUserForm();
+   save(state);
+   renderAdminData(true);
+   notify('Account deleted and active tickets returned to queue.','success');
+ }
+}
+
+function renderCategories(){
+ const list=productCategories();
+ $('#categoryCount').textContent=list.length+' '+(list.length===1?'Category':'Categories');
+ $('#categoryRows').innerHTML=list.map((c,index)=>{
+   const used=state.tickets.filter(t=>t.category===c.name).length;
+   return `<tr data-id="${c.id}">
+     <td><div class="action-row">
+       <button class="btn btn-light btn-sm" data-category="up" ${index===0?'disabled':''}>↑</button>
+       <button class="btn btn-light btn-sm" data-category="down" ${index===list.length-1?'disabled':''}>↓</button>
+     </div></td>
+     <td><b>${esc(c.name)}</b><small>Shown in customer inquiry form</small></td>
+     <td>${used}</td>
+     <td><div class="action-row">
+       <button class="btn btn-light btn-sm" data-category="edit">Edit</button>
+       <button class="btn btn-danger btn-sm" data-category="delete">Delete</button>
+     </div></td>
+   </tr>`;
+ }).join('') || '<tr><td colspan="4"><div class="empty">No product category has been added. Add at least one category so customers can submit inquiries.</div></td></tr>';
+}
+function resetCategoryForm(){
+ editCategoryId=null;
+ $('#categoryForm').reset();
+ $('#categoryFormTitle').textContent='Add Product Category';
+ $('#saveCategoryBtn').textContent='Add Category';
+ $('#cancelCategoryEdit').hidden=true;
+ $('#categoryError').textContent='';
+}
+function saveCategory(e){
+ e.preventDefault();
+ const name=$('#categoryName').value.trim();
+ $('#categoryError').textContent='';
+ if(!name){
+   $('#categoryError').textContent='Enter a category name.';
+   return;
+ }
+ const duplicate=productCategories().find(c=>c.name.toLowerCase()===name.toLowerCase()&&c.id!==editCategoryId);
+ if(duplicate){
+   $('#categoryError').textContent='That product category already exists.';
+   return;
+ }
+ if(editCategoryId){
+   const category=productCategories().find(c=>c.id===editCategoryId);
+   if(!category)return;
+   const oldName=category.name;
+   category.name=name;
+   log('Product category updated: '+oldName+' → '+name+'.');
+   notify('Product category updated.','success');
+ }else{
+   productCategories().push({id:uid('cat'),name});
+   log('Product category added: '+name+'.');
+   notify('Product category added.','success');
+ }
+ save(state);
+ resetCategoryForm();
+ renderCategories();
+}
+function handleCategoryActions(e){
+ const btn=e.target.closest('button');
+ if(!btn)return;
+ const tr=btn.closest('tr');
+ const list=productCategories();
+ const index=list.findIndex(c=>c.id===tr.dataset.id);
+ if(index<0)return;
+ const category=list[index];
+ const action=btn.dataset.category;
+ if(action==='edit'){
+   editCategoryId=category.id;
+   $('#categoryName').value=category.name;
+   $('#categoryFormTitle').textContent='Edit Product Category';
+   $('#saveCategoryBtn').textContent='Save Changes';
+   $('#cancelCategoryEdit').hidden=false;
+   showAdminTab('categories');
+   window.scrollTo({top:0,behavior:'smooth'});
+   return;
+ }
+ if(action==='up'&&index>0){
+   [list[index-1],list[index]]=[list[index],list[index-1]];
+   log('Product category order updated.');
+   save(state);renderCategories();return;
+ }
+ if(action==='down'&&index<list.length-1){
+   [list[index+1],list[index]]=[list[index],list[index+1]];
+   log('Product category order updated.');
+   save(state);renderCategories();return;
+ }
+ if(action==='delete'){
+   if(list.length===1){
+     notify('At least one product category is required for the customer form. Edit this category instead.','error');
+     return;
+   }
+   const used=state.tickets.filter(t=>t.category===category.name).length;
+   const note=used?` It is used by ${used} existing ticket(s), but those tickets will keep the saved category name.`:'';
+   if(!confirm(`Delete "${category.name}" from the customer form?${note}`))return;
+   state.settings.productCategories=list.filter(c=>c.id!==category.id);
+   log('Product category deleted: '+category.name+'.');
+   if(editCategoryId===category.id)resetCategoryForm();
+   save(state);renderCategories();
+   notify('Product category removed from the customer form.','success');
+ }
+}
+
+
+function updateBrandingPreview(){
+ const name=($('#websiteName')?.value||brandName()).trim()||'SUPERMAX';
+ const subtitle=($('#websiteSubtitle')?.value||brandSubtitle()).trim()||'TECHNICAL SUPPORT';
+ const nameEl=$('#brandPreviewName'), subtitleEl=$('#brandPreviewSubtitle');
+ if(nameEl)nameEl.textContent=name;
+ if(subtitleEl)subtitleEl.textContent=subtitle;
+}
+function handleLogoSelection(e){
+ const file=e.target.files?.[0];
+ if(!file)return;
+ const allowed=['image/jpeg','image/png','image/webp'];
+ if(!allowed.includes(file.type)){
+   e.target.value='';
+   notify('Logo must be JPG, PNG, or WEBP.','error');
+   return;
+ }
+ if(file.size>1024*1024){
+   e.target.value='';
+   notify('Logo file must not exceed 1 MB.','error');
+   return;
+ }
+ const reader=new FileReader();
+ reader.onload=()=>{
+   state.settings.logoDataUrl=String(reader.result||'');
+   settingsDirty=true;
+   const preview=$('#brandPreviewLogo');
+   if(preview)preview.innerHTML=`<img src="${state.settings.logoDataUrl}" alt="Logo preview">`;
+   notify('Logo selected. Click Save All Settings to apply it.','success');
+ };
+ reader.onerror=()=>notify('Unable to read the selected logo.','error');
+ reader.readAsDataURL(file);
+}
+function removeCustomLogo(){
+ state.settings.logoDataUrl='';
+ settingsDirty=true;
+ const input=$('#websiteLogoInput');
+ if(input)input.value='';
+ const preview=$('#brandPreviewLogo');
+ if(preview)preview.textContent='S';
+ notify('Custom logo removed. Click Save All Settings to confirm.','success');
+}
+
+function saveSettings(){
+ const websiteName=$('#websiteName').value.trim();
+ const websiteSubtitle=$('#websiteSubtitle').value.trim();
+ const url=$('#pageUrl').value.trim();
+ const sla=Number($('#slaMinutes').value);
+ if(!websiteName){notify('Website / Page Name is required.','error');return;}
+ if(!websiteSubtitle){notify('Website Subtitle is required.','error');return;}
+ if(url && !/^https?:\/\//i.test(url)){notify('Page URL must start with http:// or https://','error'); return;}
+ if(!Number.isFinite(sla) || sla<5 || sla>1440){notify('SLA must be between 5 and 1440 minutes.','error'); return;}
+ state.settings.websiteName=websiteName;
+ state.settings.websiteSubtitle=websiteSubtitle;
+ state.settings.pageName=(websiteName+' '+websiteSubtitle).trim();
+ state.settings.pageUrl=url;
+ state.settings.slaMinutes=sla;
+ settingsDirty=false;
+ log('Website branding and system settings updated by Main Admin.');
+ save(state);
+ applyBranding();
+ notify('Logo, website name, and settings saved.','success');
+}
+function exportCSV(){
+ const rows=[['Technical Support','Username','Accepted','Missed Offers','No First Reply','Resolved']];
+ techUsers().forEach(u=>rows.push([u.name,u.username,acceptedCount(u.id),missedCount(u.id),noReplyCount(u.id),resolvedCount(u.id)]));
+ const csv=rows.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');
+ const a=document.createElement('a');
+ a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+ a.download='supermax-technical-support-report.csv';
+ a.click();
+ setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function showTicketDialog(t){
+ $('#dialogContent').innerHTML=`<h2 style="margin:0 0 8px">${esc(t.id)}</h2><span class="status ${slug(t.status)}">${esc(t.status)}</span><dl class="detail-grid" style="margin-top:16px">
+   <dt>Customer</dt><dd>${esc(t.name)}</dd>
+   <dt>Email</dt><dd>${esc(t.email)}</dd>
+   <dt>Contact Number</dt><dd>${esc(t.phone||'—')}</dd>
+   <dt>Product Category</dt><dd>${esc(t.category)}</dd>
+   <dt>Model / Serial</dt><dd>${esc(t.serial)}</dd>
+   <dt>Description</dt><dd>${esc(t.description)}</dd>
+   <dt>Assigned Support</dt><dd>${esc(user(t.assignedTo)?.name || t.assignedName || 'Unassigned')}</dd>
+   <dt>Current Offer</dt><dd>${t.currentOffer?esc(currentOfferName(t)):'—'}</dd>
+   <dt>Uploaded Images</dt><dd>${t.images.length?t.images.map(esc).join(', '):'No images'}</dd>
+   <dt>Created</dt><dd>${fmt(t.createdAt)}</dd>
+   <dt>Accepted</dt><dd>${fmt(t.acceptedAt)}</dd>
+   <dt>Business Suite</dt><dd>${fmt(t.chatAssignedAt)}</dd>
+   <dt>First Reply</dt><dd>${fmt(t.firstReplyAt)}</dd>
+   <dt>Resolved</dt><dd>${fmt(t.resolvedAt)}</dd>
+ </dl>`;
+ $('#ticketDialog').showModal();
+}
+$('#dialogClose').onclick=()=>$('#ticketDialog').close();
+$('#ticketDialog').addEventListener('click',e=>{if(e.target===$('#ticketDialog'))$('#ticketDialog').close()});
+
+state=load();
+window.addEventListener('storage',e=>{
+ if(e.key!==KEY)return;
+ state=load();
+ if($('#adminTabs')&&currentUser&&!isUserEditing()&&!$('#ticketDialog')?.open){
+   const fresh=user(currentUser.id);
+   if(fresh&&fresh.active){
+     currentUser=fresh;
+     renderAdminData(currentUser.role==='admin');
+     autoRefreshSeconds=15;
+     setAdminRefreshLabel('Updated from another device/tab');
+   }
+ }
+ if(trackedTicketId&&trackedTicketEmail&&!isUserEditing()){
+   refreshTrackedTicket(false);
+ }
+ applyBranding();
+});
+
+const portal=new URLSearchParams(location.search).get('portal');
+if(portal==='customer'){renderCustomer();}
+else if(portal==='admin'){
+  const sid=sessionStorage.getItem(SESSION);
+  if(sid){currentUser=user(sid);}
+  renderAdmin();
+}else{renderLauncher();}
+})();
+</script>
+</body>
+</html>
